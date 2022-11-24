@@ -1,4 +1,3 @@
-const { response, request } = require('express');
 const User = require('../models/user'); 
 const bcrypt = require('../helpers/bcrypt')
 
@@ -50,7 +49,8 @@ const usuariosPatch = (req, res) => {
 }
 
 const usuariosDelete = async (req, res) => {
-      const id = req.params.id
+      const id = req.params.id;
+      // const userValidado = req.user;      
       // const userDelete = await User.findByIdAndDelete(id);
       const usuario = await User.findByIdAndUpdate(id, {state:false});  
       res.status(200).json({
