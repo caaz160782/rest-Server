@@ -9,7 +9,8 @@ class Server{
   constructor() {
     this.app = express();
     this.usuariosRouter = '/api/usuarios';
-    this.authPath= '/api/auth'
+    this.authPath = '/api/auth'
+    this.categoriesRouter = '/api/categorias';
     //conectar a bd
     this.conectarDB();
 
@@ -35,8 +36,7 @@ class Server{
   routes() {
     this.app.use(this.authPath, require('../routes/auth'))
     this.app.use(this.usuariosRouter, require('../routes/user'))
-
-   
+    this.app.use(this.categoriesRouter, require('../routes/categories'))   
   }
 
   listen() {
