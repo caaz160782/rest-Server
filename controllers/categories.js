@@ -1,23 +1,27 @@
-const { Category } = require('../models'); 
-
-
+const  Category  = require('../models/category'); 
 
 const catregoriesGet = async (req, res) => {
    
+      const getCategories = await Category.find({})
+    //.populate("user", ["name"])
+      .populate("user", ["name"])    
       res.status(200).json({
+         getCategories,   
          msg: 'listado de categories'
       });
 }
 
 const categoriesGetId = async (req, res) => {
-   
+      const idCategory = req.params.id
+      const categoryDB = await Category.findById(idCategory)
+            .populate("user", ["name"]);
       res.status(200).json({
-         msg: 'listado de categories id'
+         categoryDB,   
+         msg: 'listado de categories id' 
       });
 }
 
 const categoriesPost = async (req, res) => {
-      // const { name, state, user } = req.body;
       const name = req.body.name.toUpperCase();
       const categoryDB = await Category.findOne({ name });
       if ( categoryDB) {
@@ -34,18 +38,25 @@ const categoriesPost = async (req, res) => {
       res.status(201).json({
                   newCategory,
                   msg: 'crear categoria'
-        });      
+     });      
 }    
 
 const categoriesPut = async (req, res) => {
+      const idCategory = req.params.id
+      const name = req.body.name.toUpperCase();      
+      const state = req.body.state;      
+      const category = await Category.findByIdAndUpdate(idCategory, { name,state},  { new: true });     
       res.status(200).json({
+           category, 
            msg: 'modificar categoria'
       });
 }
 
 const categoriesDelete = async (req, res) => {
+      const idCategory = req.params.id
+      const category = await Category.findByIdAndUpdate(idCategory, { state:false},  { new: true });  
       res.status(200).json({
-         usuario, 
+         category, 
          msg: 'categorua dada de baja'
       });
 }

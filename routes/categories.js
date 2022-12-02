@@ -11,12 +11,16 @@ const {
 const {
    validarJWT,
    validarCampos,
-   } = require('../middlewares');
+} = require('../middlewares');
+const { existeCategoryId} = require('../helpers/db-validators');   
 const router = Router();
 
-router.get('/', catregoriesGet);
+router.get('/' ,catregoriesGet);
 
-router.get('/:id' ,categoriesGetId);
+router.get('/:id', [
+   check('id', 'No es un Id valido').isMongoId(),
+   check('id').custom(existeCategoryId),
+   validarCampos], categoriesGetId);
 
 router.post('/', [
    validarJWT,
@@ -24,11 +28,18 @@ router.post('/', [
    validarCampos
 ],categoriesPost);
 
-router.put('/:id'
+router.put('/:id', [
+    validarJWT,
+   check('id', 'No es un Id valido').isMongoId(),
+   check('id').custom(existeCategoryId),
+   validarCampos]
  , categoriesPut);
     
   
-router.delete('/:id',categoriesDelete);  
+router.delete('/:id', [ validarJWT,
+   check('id', 'No es un Id valido').isMongoId(),
+   check('id').custom(existeCategoryId),
+   validarCampos],categoriesDelete);  
 
 
 module.exports = router;
