@@ -24,7 +24,7 @@ const categoriesGetId = async (req, res) => {
 const categoriesPost = async (req, res) => {
       const name = req.body.name.toUpperCase();
       const categoryDB = await Category.findOne({ name });
-      if ( categoryDB) {
+      if (categoryDB) {
            return res.status(400).json({
                msg: `Existe una categoria: ${categoryDB.name}`
              });
@@ -32,7 +32,7 @@ const categoriesPost = async (req, res) => {
       const data = {
             name,
             user: req.user._id
-      }
+      }    
      const category = new Category(data);
      const newCategory = await category.save();
       res.status(201).json({
