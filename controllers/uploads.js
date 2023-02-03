@@ -23,14 +23,12 @@ const cargarArchivo = async (req,res=response)=>{
  const uptdateImage = async (req,res=response)=>{
   const {id,coleccion}=req.params;
   let modelo;
-
   switch (coleccion) {
     case 'usuarios':
      modelo= await User.findById(id);
         if(!modelo){
           return res.status(400).json({msg:'No existe el usuario'});   
         }
-
      break;
      case 'productos':
       modelo= await Product.findById(id);
@@ -59,8 +57,43 @@ const cargarArchivo = async (req,res=response)=>{
 
 }
 
+const getImage = async (req,res=response)=>{
+  const {id,coleccion}=req.params;
+  let modelo;
+  switch (coleccion) {
+    case 'usuarios':
+     modelo= await User.findById(id);
+        if(!modelo){
+          return res.status(400).json({msg:'No existe el usuario'});   
+        }
+     break;
+     case 'productos':
+      modelo= await Product.findById(id);
+      if(!modelo){
+        return res.status(400).json({msg:'No existe el producto'});   
+      }
+      
+   break;
+    default:
+       return res.status(500).json({msg:'Se me olvido validar esto'});
+    break;
+  }
+  //Limpiar imagenes previas
+    if(modelo.image){
+      //borrar imagen del server      
+     const pathImagen=path.join(__dirname,'../uploads',coleccion,modelo.image)
+     if(fs.existsSync(pathImagen)){
+       // fs.unlinkSync(pathImagen);
+       return res.sendFile(pathImagen);
+     }
+    }  
+   const pathImagen=path.join(__dirname,'../assets/no-image.jpg');
+   return res.sendFile(pathImagen);
+ 
+}
 
 module.exports={
     cargarArchivo,
-    uptdateImage
+    uptdateImage,
+    getImage
 }
