@@ -32,7 +32,8 @@ const ProductSchema = Schema({
   available:{
     type: String,
     default: true,          
-  }
+  },
+  image:{type:String},
 
 })
 
